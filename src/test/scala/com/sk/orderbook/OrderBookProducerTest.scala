@@ -1,10 +1,10 @@
-package com.sk
+package com.sk.orderbook
 
-import com.sk.ConsoleInputParser.ConsoleInput
-import com.sk.OrderBookProducer.OrderBookRow
-import com.sk.OrderEventFileParser.OrderRow
-import com.sk.enums.Instruction.{Delete, New, Update}
-import com.sk.enums.Side.{Ask, Bid}
+import com.sk.orderbook.ConsoleInputParser.ConsoleInput
+import com.sk.orderbook.OrderBookProducer.OrderBookRow
+import com.sk.orderbook.OrderEventFileParser.OrderRow
+import com.sk.orderbook.enums.Instruction.{New, Update}
+import com.sk.orderbook.enums.Side.{Ask, Bid}
 import org.scalatest.{FunSuite, Matchers}
 
 class OrderBookProducerTest extends FunSuite with Matchers {

@@ -1,4 +1,4 @@
-package com.sk
+package com.sk.orderbook
 
 object ConsoleInputParser {
   case class ConsoleInput(fileName: String, tickSize: Double, bookDepth: Int)

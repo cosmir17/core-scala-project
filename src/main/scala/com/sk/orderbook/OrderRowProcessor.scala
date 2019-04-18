@@ -1,8 +1,8 @@
-package com.sk
+package com.sk.orderbook
 
-import com.sk.OrderEventFileParser.OrderRow
-import com.sk.OrderRowProcessor.OrderRowsWithIdx
-import com.sk.enums.Instruction.{Delete, New, Update}
+import com.sk.orderbook.OrderEventFileParser.OrderRow
+import com.sk.orderbook.OrderRowProcessor.OrderRowsWithIdx
+import com.sk.orderbook.enums.Instruction.{Delete, New, Update}
 
 object OrderRowProcessor {
 

@@ -1,7 +1,6 @@
-package com.sk
+package com.sk.orderbook
 
-import com.sk.OrderBookProducer.OrderBookRow
-import scala.language.implicitConversions
+import com.sk.orderbook.OrderBookProducer.OrderBookRow
 
 object OrderBookPrinter {
   private val emptyOutputMessage = "Output is empty"

@@ -1,8 +1,8 @@
-package com.sk
+package com.sk.orderbook
 
-import com.sk.OrderEventFileParser.OrderRow
-import com.sk.enums.Instruction.{Delete, New, Update}
-import com.sk.enums.Side.{Ask, Bid}
+import com.sk.orderbook.OrderEventFileParser.OrderRow
+import com.sk.orderbook.enums.Instruction.{Delete, New, Update}
+import com.sk.orderbook.enums.Side.{Ask, Bid}
 import org.scalatest.{FunSuite, Matchers}
 
 class OrderRowProcessorTest extends FunSuite with Matchers {

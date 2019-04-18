@@ -1,6 +1,6 @@
-package com.sk
+package com.sk.orderbook
 
-import com.sk.OrderBookProducer.OrderBookRow
+import com.sk.orderbook.OrderBookProducer.OrderBookRow
 import org.scalatest.{FunSuite, Matchers}
 
 class OrderBookPrinterTest extends FunSuite with Matchers {

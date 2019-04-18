@@ -1,8 +1,8 @@
-package com.sk
+package com.sk.orderbook
 
-import com.sk.enums.Instruction.Instruction
-import com.sk.enums.{Instruction, Side}
-import com.sk.enums.Side.Side
+import com.sk.orderbook.enums.Instruction.Instruction
+import com.sk.orderbook.enums.Side.Side
+import com.sk.orderbook.enums.{Instruction, Side}
 
 import scala.io.Source
 import scala.util.{Failure, Success, Try}

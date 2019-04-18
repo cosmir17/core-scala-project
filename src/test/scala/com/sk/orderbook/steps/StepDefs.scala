@@ -1,7 +1,8 @@
-package com.sk.steps
+package com.sk.orderbook.steps
 
 import java.io.{ByteArrayOutputStream, PrintStream}
 
+import com.sk.orderbook.Main
 import cucumber.api.scala.{EN, ScalaDsl}
 import io.cucumber.datatable.DataTable
 import org.scalatest.Matchers
@@ -26,7 +27,7 @@ class StepDefs extends ScalaDsl with EN with Matchers {
   }
 
   When("""the main app runs with tick size {double} and book depth {int}"""){ (tickSize: Double, depth: Double) =>
-    new com.sk.Main(s"prog updates.txt $tickSize $depth")
+    new Main(s"prog updates.txt $tickSize $depth")
   }
 
   Then("""^the following should be printed$"""){ data: DataTable =>

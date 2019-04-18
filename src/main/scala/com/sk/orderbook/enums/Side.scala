@@ -1,4 +1,4 @@
-package com.sk.enums
+package com.sk.orderbook.enums
 
 object Side {
   sealed trait Side

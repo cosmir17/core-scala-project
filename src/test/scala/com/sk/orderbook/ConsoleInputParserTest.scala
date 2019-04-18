@@ -1,6 +1,6 @@
-package com.sk
+package com.sk.orderbook
 
-import com.sk.ConsoleInputParser.ConsoleInput
+import com.sk.orderbook.ConsoleInputParser.ConsoleInput
 import org.scalatest.{FunSuite, Matchers}
 
 class ConsoleInputParserTest extends FunSuite with Matchers {

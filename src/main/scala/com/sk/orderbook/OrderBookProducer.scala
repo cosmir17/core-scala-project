@@ -1,8 +1,8 @@
-package com.sk
+package com.sk.orderbook
 
-import com.sk.ConsoleInputParser.ConsoleInput
-import com.sk.OrderEventFileParser.OrderRow
-import com.sk.enums.Side.{Ask, Bid}
+import com.sk.orderbook.ConsoleInputParser.ConsoleInput
+import com.sk.orderbook.OrderEventFileParser.OrderRow
+import com.sk.orderbook.enums.Side.{Ask, Bid}
 
 object OrderBookProducer {
 
