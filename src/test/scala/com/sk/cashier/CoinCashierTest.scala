@@ -34,3 +34,4 @@ class CoinCashierTest extends FunSuite with Matchers {
     result shouldBe "1 x £2, 1 x 20p, 1 x 2p"
   }
 }
+jgjgasdf
