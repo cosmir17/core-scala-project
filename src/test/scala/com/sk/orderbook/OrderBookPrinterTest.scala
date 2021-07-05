@@ -1,9 +1,10 @@
 package com.sk.orderbook
 
 import com.sk.orderbook.OrderBookProducer.OrderBookRow
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.matchers.should._
+import org.scalatest.funsuite.AnyFunSuite
 
-class OrderBookPrinterTest extends FunSuite with Matchers {
+class OrderBookPrinterTest extends AnyFunSuite with Matchers {
 
   test("should compute a list of order book strings when there are None values") {
     val orderBook = Seq(

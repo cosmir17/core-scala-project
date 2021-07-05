@@ -1,8 +1,9 @@
 package com.sk.binaryadder
 
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.matchers.should._
+import org.scalatest.funsuite.AnyFunSuite
 
-class BinaryAdderTest extends FunSuite with Matchers {
+class BinaryAdderTest extends AnyFunSuite with Matchers {
 
   test("0 should be 1") {
     val result = BinaryAdder.addOne(Seq(0))
