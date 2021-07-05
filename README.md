@@ -1,3 +1,5 @@
+![Build Status](https://codebuild.eu-west-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiVmJyME1kd2o2eTN0QUNQbEs2YVZ5aVlZam4zNGRXMC9SSUNyT1o1ajR2MW5XK2ozc25VcXQ2SFVXdFg1Yzg3aWNQMG1uNGFlK01mS0FFOE9kUk81M2owPSIsIml2UGFyYW1ldGVyU3BlYyI6IkdsRVA2Yk4wK0NoR1BhNGIiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)
+
 This repository contains three interview assignments.
 
 1) binary adder, it adds one to a sequence of binary numbers representing one binary number (1010 => 1011, 1110 => 1111, 111 => 1000, etc)
