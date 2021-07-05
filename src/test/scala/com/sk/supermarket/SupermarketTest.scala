@@ -1,9 +1,10 @@
 package com.sk.supermarket
 
 import com.sk.supermarket.Supermarket._
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.matchers.should._
+import org.scalatest.funsuite.AnyFunSuite
 
-class SupermarketTest extends FunSuite with Matchers {
+class SupermarketTest extends AnyFunSuite with Matchers {
 
   test("A B C D") {
     val result = Supermarket.calculateTotalPrice(List(A, B, C, D))

@@ -5,9 +5,10 @@ import com.sk.orderbook.OrderBookProducer.OrderBookRow
 import com.sk.orderbook.OrderEventFileParser.OrderRow
 import com.sk.orderbook.enums.Instruction.{New, Update}
 import com.sk.orderbook.enums.Side.{Ask, Bid}
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.matchers.should._
+import org.scalatest.funsuite.AnyFunSuite
 
-class OrderBookProducerTest extends FunSuite with Matchers {
+class OrderBookProducerTest extends AnyFunSuite with Matchers {
 
   test("should process orders new and update orders") {
     val consoleInput = ConsoleInput("", 10.0, 2)

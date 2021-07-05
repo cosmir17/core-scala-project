@@ -3,9 +3,10 @@ package com.sk.orderbook
 import com.sk.orderbook.OrderEventFileParser._
 import com.sk.orderbook.enums.Instruction.{Delete, New, Update}
 import com.sk.orderbook.enums.Side.{Ask, Bid}
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.matchers.should._
+import org.scalatest.funsuite.AnyFunSuite
 
-class OrderEventFileParserTest extends FunSuite with Matchers {
+class OrderEventFileParserTest extends AnyFunSuite with Matchers {
 
   test("should parse normal order event history to list of RawOrderRows") {
     val history = Seq(

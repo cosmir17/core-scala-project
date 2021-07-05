@@ -1,8 +1,9 @@
 package com.sk.cashier
 
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.matchers.should._
+import org.scalatest.funsuite.AnyFunSuite
 
-class CoinCashierTest extends FunSuite with Matchers {
+class CoinCashierTest extends AnyFunSuite with Matchers {
 
   test("empty string should be given for 0 pence") {
     val result = CoinCashier.giveChange(0)

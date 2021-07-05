@@ -1,11 +1,10 @@
 package com.sk.orderbook.steps
 
 import java.io.{ByteArrayOutputStream, PrintStream}
-
 import com.sk.orderbook.Main
-import cucumber.api.scala.{EN, ScalaDsl}
 import io.cucumber.datatable.DataTable
-import org.scalatest.Matchers
+import io.cucumber.scala.{EN, ScalaDsl}
+import org.scalatest.matchers.should._
 
 class StepDefs extends ScalaDsl with EN with Matchers {
   private val outContent = new ByteArrayOutputStream

@@ -1,9 +1,10 @@
 package com.sk.orderbook
 
 import com.sk.orderbook.ConsoleInputParser.ConsoleInput
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.matchers.should._
+import org.scalatest.funsuite.AnyFunSuite
 
-class ConsoleInputParserTest extends FunSuite with Matchers {
+class ConsoleInputParserTest extends AnyFunSuite with Matchers {
 
   test("should convert a string to ConsoleInput object") {
     val input = "prog updates.txt 10.0 3"

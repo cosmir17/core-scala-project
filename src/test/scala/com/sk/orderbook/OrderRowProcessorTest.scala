@@ -3,9 +3,10 @@ package com.sk.orderbook
 import com.sk.orderbook.OrderEventFileParser.OrderRow
 import com.sk.orderbook.enums.Instruction.{Delete, New, Update}
 import com.sk.orderbook.enums.Side.{Ask, Bid}
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.matchers.should._
+import org.scalatest.funsuite.AnyFunSuite
 
-class OrderRowProcessorTest extends FunSuite with Matchers {
+class OrderRowProcessorTest extends AnyFunSuite with Matchers {
 
   test("should do new and update shifting market update process") {
     val inputRows = Seq(
