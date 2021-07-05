@@ -5,3 +5,5 @@ This repository contains three interview assignments.
 2) order book, Since it was an interview assignment, I would like not to describe what the business logic is. There are test cases describing logic for each class. The central core algorithm is complex as this business requirement was in a new domain (I never worked on order book previously).
 
 3) cashier
+
+4) supermarket, the program should work out the total price (with promotions applied) for a given list of items
