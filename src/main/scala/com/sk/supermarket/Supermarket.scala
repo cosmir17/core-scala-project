@@ -18,11 +18,11 @@ object Supermarket {
       .groupBy(identity)
       .map { case (item, listOfItems) => (item.price, listOfItems.size, item.promotion) }
       .map {
-        case (price, count, Some(promotion)) => applyPromotion(price, count, promotion)
+        case (price, count, Some(promotion)) => applyPromotionForAGroupOfItems(price, count, promotion)
         case (price, count, None) => price * count
          }
       .sum
 
-  private def applyPromotion(price: Int, count: Int, promotion: Promotion) =
+  private def applyPromotionForAGroupOfItems(price: Int, count: Int, promotion: Promotion) =
     (count / promotion.count * promotion.newPrice) + (count % promotion.count * price)
 }
