@@ -19,7 +19,7 @@ object Supermarket {
       .map { case (item, listOfItems) => (item.price, listOfItems.size, item.promotion) }
       .map {
         case (price, count, Some(promotion)) => applyPromotionForAGroupOfItems(price, count, promotion)
-        case (price, count, None) => price * count
+        case (price, count, None)            => price * count
          }
       .sum
 
