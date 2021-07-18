@@ -6,7 +6,7 @@ object Main extends App {
   val commandInputMsg = "******* Please enter your command, prog for normal command, exit to terminate *******"
   println(commandInputMsg)
 
-  for (ln <- io.Source.stdin.getLines) new Main(ln).orderBookMsgs.foreach(println)
+  for (ln <- scala.io.Source.stdin.getLines) new Main(ln).orderBookMsgs.foreach(println)
 }
 
 class Main(input: String) {
