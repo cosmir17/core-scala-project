@@ -20,6 +20,9 @@ case class Result(
                    code: Option[String] = None
                  )
 
+case class BatchData(blackList: Set[String], results: Seq[Result]) { def this() = this(Set(), Seq()) }
+case object BatchData { def apply() = new BatchData() }
+
 object Filtering {
   type ErrorOr[A] = Either[Throwable, A]
   val meEither = MonadError[ErrorOr, Throwable]
@@ -29,11 +32,10 @@ object Filtering {
   private val invalidAccountTO = "INVALID_ACCOUNT_TO"
   private val invalidCurrency = "INVALID_CURRENCY"
   private val invalidAmount = "INVALID_AMOUNT"
-  private val launderError = "LAUNDER"
 
+  private val launderError = "LAUNDER"
   private val launders = Seq("account-c", "account-f")
   case object LaunderException extends Exception(launderError)
-
 
   def filter(input: Transaction): Result =
     (for {
@@ -51,13 +53,13 @@ object Filtering {
     }
 
   def filter(input: Seq[Transaction]): Seq[Result] =
-    input.foldLeft(Seq[(Set[String], Result)]())( (prevIterations, now) => {
+    input.foldLeft(BatchData())((prevIterations, now) => {
       val result = filter(now)
-      val blackListed = prevIterations.lastOption.map(_._1).getOrElse(Set())
+      val blackListed = prevIterations.blackList
       if (result.code.contains(launderError) | blackListed.contains(now.accountFrom) | blackListed.contains(now.accountTo)) {
         val blackListed2 = blackListed + now.accountFrom; val blackListed3 = blackListed2 + now.accountTo
-        prevIterations :+ (blackListed3, Result(false, Some(launderError)))
+        BatchData(blackListed3, prevIterations.results :+ Result(false, Some(launderError)))
       }
-      else prevIterations :+ (blackListed, result)
-    }).map(_._2)
+      else BatchData(blackListed, prevIterations.results :+ result)
+    }).results
 }
