@@ -21,7 +21,7 @@ case class Result(
                  )
 
 case class BatchData(blackList: Set[String], results: Seq[Result]) { def this() = this(Set(), Seq()) }
-case object BatchData { def apply() = new BatchData() }
+object BatchData { def apply() = new BatchData() }
 
 object Filtering {
   type ErrorOr[A] = Either[Throwable, A]
