@@ -52,14 +52,31 @@ object Filtering {
       case Right(_)                                                            => Result(true)
     }
 
-  def filter(input: Seq[Transaction]): Seq[Result] =
-    input.foldLeft(BatchData())((prevIterations, now) => {
-      val result = filter(now)
-      val blackListed = prevIterations.blackList
-      if (result.code.contains(launderError) | blackListed.contains(now.accountFrom) | blackListed.contains(now.accountTo)) {
-        val blackListed2 = blackListed + now.accountFrom; val blackListed3 = blackListed2 + now.accountTo
-        BatchData(blackListed3, prevIterations.results :+ Result(false, Some(launderError)))
-      }
-      else BatchData(blackListed, prevIterations.results :+ result)
-    }).results
+  def filter(input: Seq[Transaction]): Seq[Result] = {
+    val computed = input.foldLeft(BatchData())(updateBlackListAndProduceResult)
+    printIfLaundersFound(computed)
+    computed.results
+  }
+
+  private def printIfLaundersFound(computed: BatchData): Unit = {
+    (launders.sorted, computed.blackList.diff(launders.toSet).toSeq) match {
+      case (Seq(), Seq()) =>
+      case (original, Seq()) =>
+        println(original.mkString("The original known launders: ", ", ", ""))
+      case (original, discovered) =>
+        println(original.mkString("The original known launders: ", ", ", ""))
+        println(discovered.mkString("newly discovered suspected launders: ", ", ", ""))
+    }
+  }
+
+  private def updateBlackListAndProduceResult(prevIterations: BatchData, now: Transaction): BatchData = {
+    val result = filter(now)
+    val blackListed = prevIterations.blackList
+    if (result.code.contains(launderError) | blackListed.contains(now.accountFrom) | blackListed.contains(now.accountTo)) {
+      val blackListed2 = blackListed + now.accountFrom;
+      val blackListed3 = blackListed2 + now.accountTo
+      BatchData(blackListed3, prevIterations.results :+ Result(false, Some(launderError)))
+    }
+    else BatchData(blackListed, prevIterations.results :+ result)
+  }
 }
