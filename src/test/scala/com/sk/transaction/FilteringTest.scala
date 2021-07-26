@@ -46,6 +46,16 @@ class FilteringTest extends AnyFreeSpec with Matchers {
       Filtering.filter(transaction) shouldBe Result(false, Some("INVALID_ACCOUNT_TO"))
     }
 
+    "unsuccessful for launder from-account c" in {
+      val transaction = Transaction("peter-id", 2000, "ETH", "account-c", "normal-account")
+      Filtering.filter(transaction) shouldBe Result(false, Some("LAUNDER"))
+    }
+
+    "unsuccessful for launder to-account c" in {
+      val transaction = Transaction("peter-id", 2000, "ETH", "normal-account", "account-c")
+      Filtering.filter(transaction) shouldBe Result(false, Some("LAUNDER"))
+    }
+
   }
 
 }

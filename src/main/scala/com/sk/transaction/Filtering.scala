@@ -25,21 +25,39 @@ object Filtering {
   val meEither = MonadError[ErrorOr, Throwable]
   implicit val moneyContext = defaultMoneyContext
 
-  val invalidUserId = "INVALID_USER_ID"
-  val invalidAccountTO = "INVALID_ACCOUNT_TO"
-  val invalidCurrency = "INVALID_CURRENCY"
-  val invalidAmount = "INVALID_AMOUNT"
+  private val invalidUserId = "INVALID_USER_ID"
+  private val invalidAccountTO = "INVALID_ACCOUNT_TO"
+  private val invalidCurrency = "INVALID_CURRENCY"
+  private val invalidAmount = "INVALID_AMOUNT"
+  private val launderError = "LAUNDER"
+
+  private val launders = Seq("account-c", "account-f")
+  case object LaunderException extends Exception(launderError)
+
 
   def filter(input: Transaction): Result =
     (for {
-      userId     <- meEither.ensure(meEither.pure(input.userId))(new IllegalArgumentException(invalidUserId))(_ != "")
-      accountTo  <- meEither.ensure(meEither.pure(input.accountTo))(new IllegalArgumentException(invalidAccountTO))(_ != "")
-      currency   <- MonadError[Try, Throwable].ensure(Currency(input.currency))(new IllegalArgumentException(invalidCurrency))(_ == ETH)
+      userId          <- meEither.ensure(meEither.pure(input.userId))(new IllegalArgumentException(invalidUserId))(_ != "")
+      accountTo       <- meEither.ensure(meEither.pure(input.accountTo))(new IllegalArgumentException(invalidAccountTO))(_ != "")
+      launderFreeFrom <- meEither.ensure(meEither.pure(input.accountFrom))(LaunderException)(!launders.contains(_))
+      launderFreeTo   <- meEither.ensure(meEither.pure(input.accountTo))(LaunderException)(!launders.contains(_))
+      currency        <- MonadError[Try, Throwable].ensure(Currency(input.currency))(new IllegalArgumentException(invalidCurrency))(_ == ETH)
         .toEither match { case Left(NoSuchCurrencyException(_, _)) => Left(new IllegalArgumentException(invalidCurrency)); case r => r }
-      amount     <- meEither.ensure(meEither.pure(input.amount))(new IllegalArgumentException(invalidAmount))(_ > 1000)
-    } yield (userId, accountTo, currency, amount)) match {
-      case Left(e: IllegalArgumentException)  => Result(false, Option(e.getMessage))
+      amount          <- meEither.ensure(meEither.pure(input.amount))(new IllegalArgumentException(invalidAmount))(_ > 1000)
+    } yield (userId, accountTo, launderFreeFrom, launderFreeTo, currency, amount)) match {
+      case Left(aOrB @ (_: IllegalArgumentException | LaunderException))       => Result(false, Option(aOrB.getMessage))
       case Left(e)                            => println("Not recognised error"); Result(false, Option(e.getMessage))
-      case Right(_)                           => Result(true)
+      case Right(_)                                                            => Result(true)
     }
+
+  def filter(input: Seq[Transaction]): Seq[Result] =
+    input.foldLeft(Seq[(Set[String], Result)]())( (prevIterations, now) => {
+      val result = filter(now)
+      val blackListed = prevIterations.lastOption.map(_._1).getOrElse(Set())
+      if (result.code.contains(launderError) | blackListed.contains(now.accountFrom) | blackListed.contains(now.accountTo)) {
+        val blackListed2 = blackListed + now.accountFrom; val blackListed3 = blackListed2 + now.accountTo
+        prevIterations :+ (blackListed3, Result(false, Some(launderError)))
+      }
+      else prevIterations :+ (blackListed, result)
+    }).map(_._2)
 }
