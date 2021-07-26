@@ -58,7 +58,7 @@ object Filtering {
     computed.results
   }
 
-  private def printIfLaundersFound(computed: BatchData): Unit = {
+  private def printIfLaundersFound(computed: BatchData): Unit =
     (launders.sorted, computed.blackList.diff(launders.toSet).toSeq) match {
       case (Seq(), Seq()) =>
       case (original, Seq()) =>
@@ -67,7 +67,6 @@ object Filtering {
         println(original.mkString("The original known launders: ", ", ", ""))
         println(discovered.mkString("newly discovered suspected launders: ", ", ", ""))
     }
-  }
 
   private def updateBlackListAndProduceResult(prevIterations: BatchData, now: Transaction): BatchData = {
     val result = filter(now)
