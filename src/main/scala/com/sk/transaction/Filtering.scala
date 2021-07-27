@@ -37,6 +37,11 @@ object Filtering {
   private val launders = Seq("account-c", "account-f")
   case object LaunderException extends Exception(launderError)
 
+  /**
+    * Single validation operation
+    * @param Transaction object
+    * @return Result object
+    */
   def filter(input: Transaction): Result =
     (for {
       userId          <- meEither.ensure(meEither.pure(input.userId))(new IllegalArgumentException(invalidUserId))(_ != "")
@@ -52,14 +57,28 @@ object Filtering {
       case Right(_)                                                            => Result(true)
     }
 
+  /**
+    * Batch validation operation
+    * @param a list of Transactions
+    * @return a sequence of Results
+    */
   def filter(input: Seq[Transaction]): Seq[Result] = {
     val computed = input.foldLeft(BatchData())(updateBlackListAndProduceResult)
     printIfLaundersFound(computed)
     computed.results
   }
 
-  private def printIfLaundersFound(computed: BatchData): Unit =
-    (launders.sorted, computed.blackList.diff(launders.toSet).toSeq) match {
+  /**
+    * logging is a side effect. Cats effect is to be used for thoroughness and testing ideally.
+    * However, it seems ok not to use it for this purpose as this application is not under load and not running for 24hs/365ds.
+    * also, the timing when they get printed is not a crucial matter for this application
+    *
+    * for enterprise-level application use, CE can be used to test the logging. Please refer to my other project.
+    * https://github.com/cosmir17/cats-effect3-projects/blob/master/video-asset-handler/modules/tests/src/test/scala/modules/HashHandlerCompareTest.scala
+    * @param BatchData launders and Results
+    */
+  private def printIfLaundersFound(laundersAndResults: BatchData): Unit =
+    (launders.sorted, laundersAndResults.blackList.diff(launders.toSet).toSeq) match {
       case (Seq(), Seq()) =>
       case (original, Seq()) =>
         println(original.mkString("The original known launders: ", ", ", ""))
@@ -68,14 +87,23 @@ object Filtering {
         println(discovered.mkString("newly discovered suspected launders: ", ", ", ""))
     }
 
-  private def updateBlackListAndProduceResult(prevIterations: BatchData, now: Transaction): BatchData = {
-    val result = filter(now)
-    val blackListed = prevIterations.blackList
-    if (result.code.contains(launderError) | blackListed.contains(now.accountFrom) | blackListed.contains(now.accountTo)) {
-      val blackListed2 = blackListed + now.accountFrom;
-      val blackListed3 = blackListed2 + now.accountTo
-      BatchData(blackListed3, prevIterations.results :+ Result(false, Some(launderError)))
+  /**
+    * This is for the folding operation in the Batch filter method.
+    * This takes a list of (launders and Results) and a single transaction object, yield a Result for the supplied transaction data.
+    * This result gets appended inside the provided BatchData object as well as newly discovered associated launders
+    * for the next iteration of the folding process.
+    * @param laundersAndResults
+    * @param transaction
+    * @return a newly appended laundersAndResults object
+    */
+  private def updateBlackListAndProduceResult(laundersAndResults: BatchData, transaction: Transaction): BatchData = {
+    val result = filter(transaction)
+    val blackListed = laundersAndResults.blackList
+    if (result.code.contains(launderError) | blackListed.contains(transaction.accountFrom) | blackListed.contains(transaction.accountTo)) {
+      val blackListed2 = blackListed + transaction.accountFrom;
+      val blackListed3 = blackListed2 + transaction.accountTo
+      BatchData(blackListed3, laundersAndResults.results :+ Result(false, Some(launderError)))
     }
-    else BatchData(blackListed, prevIterations.results :+ result)
+    else BatchData(blackListed, laundersAndResults.results :+ result)
   }
 }
