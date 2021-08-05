@@ -3,6 +3,8 @@ package com.sk.transaction
 import cats.MonadError
 import cats.instances.either._
 import cats.instances.try_._
+import cats.data.State
+import cats.implicits.toFoldableOps
 import squants.market.{Currency, ETH, NoSuchCurrencyException, defaultMoneyContext}
 
 import scala.util.Try
@@ -20,8 +22,8 @@ case class Result(
                    code: Option[String] = None
                  )
 
-case class BatchData(blackList: Set[String], results: Seq[Result]) { def this() = this(Set(), Seq()) }
-object BatchData { def apply() = new BatchData() }
+case class BatchData(blackList: Set[String], results: Seq[Result])
+object BatchData { val empty = new BatchData(Set(), Seq()) }
 
 object Filtering {
   type ErrorOr[A] = Either[Throwable, A]
@@ -63,7 +65,10 @@ object Filtering {
     * @return a sequence of Results
     */
   def filter(input: Seq[Transaction]): Seq[Result] = {
-    val computed = input.foldLeft(BatchData())(updateBlackListAndProduceResult)
+    val computed = input.toList
+      .traverse_{ transaction => updateBlackListAndProduceResult(transaction) }
+      .runS(BatchData.empty)
+      .value
     printIfLaundersFound(computed)
     computed.results
   }
@@ -96,14 +101,16 @@ object Filtering {
     * @param transaction
     * @return a newly appended laundersAndResults object
     */
-  private def updateBlackListAndProduceResult(laundersAndResults: BatchData, transaction: Transaction): BatchData = {
-    val result = filter(transaction)
-    val blackListed = laundersAndResults.blackList
-    if (result.code.contains(launderError) | blackListed.contains(transaction.accountFrom) | blackListed.contains(transaction.accountTo)) {
-      val blackListed2 = blackListed + transaction.accountFrom;
-      val blackListed3 = blackListed2 + transaction.accountTo
-      BatchData(blackListed3, laundersAndResults.results :+ Result(false, Some(launderError)))
+  private def updateBlackListAndProduceResult(transaction: Transaction): State[BatchData, Unit] = State.modify {
+    laundersAndResults => {
+      val result = filter(transaction)
+      val blackListed = laundersAndResults.blackList
+      if (result.code.contains(launderError) | blackListed.contains(transaction.accountFrom) | blackListed.contains(transaction.accountTo)) {
+        val blackListed2 = blackListed + transaction.accountFrom;
+        val blackListed3 = blackListed2 + transaction.accountTo
+        BatchData(blackListed3, laundersAndResults.results :+ Result(false, Some(launderError)))
+      }
+      else BatchData(blackListed, laundersAndResults.results :+ result)
     }
-    else BatchData(blackListed, laundersAndResults.results :+ result)
   }
 }
