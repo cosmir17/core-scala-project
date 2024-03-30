@@ -15,5 +15,11 @@ libraryDependencies ++= Seq(
     "io.cucumber"        %% "cucumber-scala"     % "8.21.1"   % Test,
     "io.cucumber"        %  "cucumber-junit"     % "7.16.1"   % Test,
     "org.junit.jupiter"  %  "junit-jupiter-api"  % "5.10.2"   % Test,
-//  "com.github.sbt"     %  "junit-interface"    % "0.13.3"   % Test ** Cucumber tests disabled.
+    //  "com.github.sbt"     %  "junit-interface"    % "0.13.3"   % Test ** Cucumber tests disabled.
+
+    //coding-gym teaching dependencies
+    "org.typelevel"      %% "cats-effect"        % "3.5.4",
+    "org.typelevel"      %% "log4cats-core"      % "2.6.0",
+    "org.typelevel"      %% "log4cats-slf4j"     % "2.6.0",
+    "ch.qos.logback"     % "logback-classic"     % "1.5.3"
 )

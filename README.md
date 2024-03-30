@@ -1,15 +1,55 @@
+# Scala 3.4.0 Repository
+
 ![Build Status](https://codebuild.eu-west-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiVmJyME1kd2o2eTN0QUNQbEs2YVZ5aVlZam4zNGRXMC9SSUNyT1o1ajR2MW5XK2ozc25VcXQ2SFVXdFg1Yzg3aWNQMG1uNGFlK01mS0FFOE9kUk81M2owPSIsIml2UGFyYW1ldGVyU3BlYyI6IkdsRVA2Yk4wK0NoR1BhNGIiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)
 
-Scala 3.4.0
 
-This repository contains five interview assignments. There are test codes for every component. 
+This repository contains a collection of Scala 3.4.0 projects, including five interview assignments and Scala 3 Coding Gym materials that I created during my time at previous companies.
 
-1) binary adder, it adds one to a sequence of binary numbers representing one binary number (1010 => 1011, 1110 => 1111, 111 => 1000, etc)
+## Interview Assignments
 
-2) order book, Since it was an interview assignment, I would like not to describe what the business logic is. There are test cases describing logic for each class. The central core algorithm is complex as this business requirement was in a new domain (I never worked on order book previously). **Cucumber tests have been temporarily disabled. The original text file required for these tests is missing. It was likely meant to be supplied as part of the examination process.
+Each interview assignment includes a set of test codes to verify the functionality of the implemented components.
 
-3) cashier
+### 1. Binary Adder
 
-4) supermarket, the program should work out the total price (with promotions applied) for a given list of items
+The Binary Adder component adds one to a sequence of binary numbers representing a single binary number. For example:
+- `1010` => `1011`
+- `1110` => `1111`
+- `111` => `1000`
 
-5) transaction, when there is a transaction or a list of transactions, the program should yield a result of validating them.
+### 2. Order Book
+
+*Since this was an interview assignment, I would prefer not to disclose the specific business logic. However, test cases are provided to describe the logic for each class. The core algorithm is complex, as the business requirement was in a new domain that I had not previously worked on.*
+
+**Please note that the Cucumber tests for this component have been temporarily disabled due to the absence of the original text file required for these tests. It was likely meant to be supplied as part of the examination process.*
+
+### 3. Cashier
+
+The Cashier component simulates a cashier system with various functionalities.
+
+### 4. Supermarket
+
+The Supermarket component calculates the total price (with promotions applied) for a given list of items.
+
+### 5. Transaction
+
+The Transaction component validates a single transaction or a list of transactions and yields the validation result.
+
+## Scala 3 Coding Gym Materials
+
+The repository also includes a set of Scala 3 Coding Gym materials covering various Scala 3 features and concepts. These materials were prepared for my colleagues to learn and practice Scala 3 programming techniques and best practices. The topics covered include:
+
+- Call-by-Name Demonstration
+- Context Functions
+- Dependent Function Types
+- Deriving
+- Effect Error Handling
+- Effect Technics
+- Inline Examples
+- Intersection and Union Types
+- Open Classes
+- Upper Bounds
+- Covariance, Contravariance, and Invariance
+
+Feel free to explore the code and materials in this repository.
+
+Happy coding with Scala 3.4.0!
