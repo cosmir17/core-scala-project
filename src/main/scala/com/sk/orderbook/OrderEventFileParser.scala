@@ -1,15 +1,17 @@
 package com.sk.orderbook
 
-import com.sk.orderbook.enums.Instruction.Instruction
-import com.sk.orderbook.enums.Side.Side
+import com.sk.orderbook.enums.Instruction.InstructionEnum
+import com.sk.orderbook.enums.Side.SideEnum
 import com.sk.orderbook.enums.{Instruction, Side}
+import com.sk.orderbook.enums.Instruction.*
+import com.sk.orderbook.enums.Side.*
 
 import scala.io.Source
-import scala.util.{Failure, Success, Try}
+import scala.util.{Failure, Success, Try, Using}
 
-object OrderEventFileParser {
+object OrderEventFileParser:
 
-  case class OrderRow(instruction: Instruction, side: Side, priceLevelIndex: Option[Int], price: Option[Int], quantity: Option[Int])
+  case class OrderRow(instruction: InstructionEnum, side: SideEnum, priceLevelIndex: Option[Int], price: Option[Int], quantity: Option[Int])
 
   val eventR = """(\D\s\D\s\d+\s\d+\s\d+)""".r
   val deleteEventR = """D(\s\D\s\d+)""".r
@@ -30,19 +32,16 @@ object OrderEventFileParser {
   def convertStrRowsToOrderRows(strRows: Seq[String]): Seq[OrderRow] = strRows.filter(_.nonEmpty).map(parseStringToOrderRow)
 
   private def fileNameToStrRows(fileName: String) : Option[Seq[String]] =
-    Try(Source.fromFile(fileName).getLines.toSeq) orElse Try(Source.fromResource(fileName).getLines.toSeq) match {
+    Using(Source.fromFile(fileName)) {_.getLines().toSeq} orElse Try(Source.fromResource(fileName).getLines.toSeq) match
       case Success(rows) => Some(rows)
       case Failure(_: NullPointerException) => throw new IllegalArgumentException(s"File with $fileName is not present")
       case Failure(_) => throw new IllegalArgumentException(s"Unknown file error")
-    }
 
   private def parseStringToOrderRow(str: String): OrderRow =
-    (eventR.findFirstIn(str) orElse deleteEventR.findFirstIn(str)).map(_.split(" ").toList) match {
+    (eventR.findFirstIn(str) orElse deleteEventR.findFirstIn(str)).map(_.split(" ").toList) match
     case Some(i::s::priceLevelIndex::price::quantity::Nil) if i.toLowerCase() != "d" =>
       OrderRow(Instruction(i), Side(s), Some(priceLevelIndex.toInt), Some(price.toInt), Some(quantity.toInt))
     case Some(i::s::priceLevelIndex::Nil) =>
       OrderRow(Instruction(i), Side(s), Some(priceLevelIndex.toInt), None, None)
     case _ =>
       throw new IllegalArgumentException("Order event file is not in the correct format")
-  }
-}

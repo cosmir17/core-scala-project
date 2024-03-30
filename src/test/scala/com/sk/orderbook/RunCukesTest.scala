@@ -7,6 +7,6 @@ import org.junit.runner.RunWith
 @CucumberOptions(
   features = Array("classpath:/orderbook/features/Order_Book.feature"),
   tags = "not @Wip",
-  glue = Array("classpath:/src/test/com/sk/orderbook/steps"),
+  glue = Array("classpath:com.sk.orderbook.steps"),
   plugin = Array("pretty", "html:target/cucumber/html"))
 class RunCukesTest

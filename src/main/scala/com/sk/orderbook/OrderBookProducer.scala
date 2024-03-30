@@ -2,9 +2,9 @@ package com.sk.orderbook
 
 import com.sk.orderbook.ConsoleInputParser.ConsoleInput
 import com.sk.orderbook.OrderEventFileParser.OrderRow
-import com.sk.orderbook.enums.Side.{Ask, Bid}
+import com.sk.orderbook.enums.Side.SideEnum.*
 
-object OrderBookProducer {
+object OrderBookProducer:
 
   /**
     * None values are going to be translated to 0.0(price) or 0(quantity).
@@ -20,11 +20,11 @@ object OrderBookProducer {
     * @param processedOrderRows
     * @return final logical product of order book processing
     */
-  def produce(consoleInput: ConsoleInput, processedOrderRows: Seq[OrderRow]): Seq[OrderBookRow] = {
+  def produce(consoleInput: ConsoleInput, processedOrderRows: Seq[OrderRow]): Seq[OrderBookRow] =
     val bids = processedOrderRows.reverse.filter(_.side == Bid)
     val asks = processedOrderRows.reverse.filter(_.side == Ask)
 
-    val books = (bids.size == asks.size, bids.size < asks.size) match {
+    val books = (bids.size == asks.size, bids.size < asks.size) match
       case (true, _) =>
         for { (bid, ask) <- bids zip asks} yield OrderBookRow(bid.price.map(_.toDouble), bid.quantity, ask.price.map(_.toDouble), ask.quantity)
       case (_, true) =>
@@ -33,11 +33,10 @@ object OrderBookProducer {
       case (false, false) =>
         val uptoAsksSize = asks.indices.map(i => OrderBookRow(bids(i).price.map(_.toDouble), bids(i).quantity, asks(i).price.map(_.toDouble), asks(i).quantity))
         (asks.size until bids.size).foldLeft[Seq[OrderBookRow]](uptoAsksSize)((foldedBooks, i) => foldedBooks :+ OrderBookRow(bids(i).price.map(_.toDouble), bids(i).quantity, None, None))
-    }
 
     val newBook = books.map(o => o.copy(bidPrice = o.bidPrice.map(_ * consoleInput.tickSize), askPrice = o.askPrice.map(_ * consoleInput.tickSize)))
 
-    (consoleInput.bookDepth == newBook.size, consoleInput.bookDepth > newBook.size) match {
+    (consoleInput.bookDepth == newBook.size, consoleInput.bookDepth > newBook.size) match
       case (true, _) =>
         newBook
       case (_, true) =>
@@ -45,6 +44,3 @@ object OrderBookProducer {
       case (false, false) =>
         val sizeDiff = newBook.size - consoleInput.bookDepth
         newBook.dropRight(sizeDiff)
-    }
-  }
-}

@@ -1,6 +1,6 @@
 package com.sk.cashier
 
-object CoinCashier {
+object CoinCashier:
   case class Coin(amount: Int, printed: String)
   case class Change(remainder: Int, divisor: Option[Int], coin: Option[Coin])
 
@@ -15,7 +15,5 @@ object CoinCashier {
     .map(change => s"${change.divisor.get} x ${change.coin.get.printed}")
     .mkString(", ")
 
-  implicit class DivisorOptioniser(remainder : Int) {
-    def divideBy(amount: Int) : Option[Int] = Some(remainder / amount).filter(_ != 0)
-  }
-}
+  extension (remainder: Int)
+    def divideBy(amount: Int): Option[Int] = Some(remainder / amount).filter(_ != 0)

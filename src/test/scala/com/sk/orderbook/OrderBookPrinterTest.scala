@@ -4,9 +4,9 @@ import com.sk.orderbook.OrderBookProducer.OrderBookRow
 import org.scalatest.matchers.should._
 import org.scalatest.funsuite.AnyFunSuite
 
-class OrderBookPrinterTest extends AnyFunSuite with Matchers {
+class OrderBookPrinterTest extends AnyFunSuite with Matchers:
 
-  test("should compute a list of order book strings when there are None values") {
+  test("should compute a list of order book strings when there are None values"):
     val orderBook = Seq(
       OrderBookRow(Some(50.0), Some(40), Some(80.0), Some(25)),
       OrderBookRow(Some(40.0), Some(40), Some(70.0), Some(20)),
@@ -20,9 +20,8 @@ class OrderBookPrinterTest extends AnyFunSuite with Matchers {
       "40.0,40,70.0,20",
       "0.0,0,60.0,10"
     )
-  }
 
-  test("should compute a list of order book strings without any None values") {
+  test("should compute a list of order book strings without any None values"):
     val orderBook = Seq(
       OrderBookRow(Some(60.0), Some(100), Some(60.0), Some(100)),
       OrderBookRow(Some(60.0), Some(80), Some(60.0), Some(100)),
@@ -36,12 +35,8 @@ class OrderBookPrinterTest extends AnyFunSuite with Matchers {
       "60.0,80,60.0,100",
       "60.0,70,60.0,100"
     )
-  }
 
-  test("should compute an empty list when there is order book") {
+  test("should compute an empty list when there is order book"):
     val orderBook = Seq()
     val strings = OrderBookPrinter.compute(orderBook)
     strings shouldBe Seq("Output is empty")
-  }
-
-}

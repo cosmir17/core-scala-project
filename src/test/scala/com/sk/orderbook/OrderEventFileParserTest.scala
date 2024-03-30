@@ -1,14 +1,14 @@
 package com.sk.orderbook
 
 import com.sk.orderbook.OrderEventFileParser._
-import com.sk.orderbook.enums.Instruction.{Delete, New, Update}
-import com.sk.orderbook.enums.Side.{Ask, Bid}
+import com.sk.orderbook.enums.Instruction.InstructionEnum.*
+import com.sk.orderbook.enums.Side.SideEnum.*
 import org.scalatest.matchers.should._
 import org.scalatest.funsuite.AnyFunSuite
 
-class OrderEventFileParserTest extends AnyFunSuite with Matchers {
+class OrderEventFileParserTest extends AnyFunSuite with Matchers:
 
-  test("should parse normal order event history to list of RawOrderRows") {
+  test("should parse normal order event history to list of RawOrderRows"):
     val history = Seq(
       "N B 1 5 30",
       "N B 2 4 40",
@@ -27,9 +27,8 @@ class OrderEventFileParserTest extends AnyFunSuite with Matchers {
       OrderRow(Update, Ask, Some(2), Some(7), Some(20)),
       OrderRow(Update, Bid, Some(1), Some(5), Some(40))
     )
-  }
 
-  test("should parse delete order event history without throwing an exception") {
+  test("should parse delete order event history without throwing an exception"):
     val history = Seq(
       "N B 1 5 30",
       "D A 1",
@@ -43,9 +42,8 @@ class OrderEventFileParserTest extends AnyFunSuite with Matchers {
       OrderRow(Delete, Ask, Some(1), None, None),
       OrderRow(Update, Bid, Some(1), Some(5), Some(40))
     )
-  }
 
-  test("should skip empty lines") {
+  test("should skip empty lines"):
     val history = Seq("N B 1 5 30", "", "U B 1 5 40")
     val result = OrderEventFileParser.convertStrRowsToOrderRows(history)
 
@@ -53,15 +51,13 @@ class OrderEventFileParserTest extends AnyFunSuite with Matchers {
       OrderRow(New, Bid, Some(1), Some(5), Some(30)),
       OrderRow(Update, Bid, Some(1), Some(5), Some(40))
     )
-  }
 
-  test("should return an empty seq if input is empty") {
+  test("should return an empty seq if input is empty"):
     val history = Seq()
     val result = OrderEventFileParser.convertStrRowsToOrderRows(history)
     result shouldBe Seq()
-  }
 
-  test("should not throw an exception when it has an extra space") {
+  test("should not throw an exception when it has an extra space"):
     val history = Seq(
       "N B 1 5 30",
       "N B 2 4 40 ",
@@ -74,15 +70,13 @@ class OrderEventFileParserTest extends AnyFunSuite with Matchers {
       OrderRow(New, Bid, Some(2), Some(4), Some(40)),
       OrderRow(New, Ask, Some(1), Some(6), Some(10))
     )
-  }
 
-  test("should not throw an exception for delete order when it has an extra space") {
+  test("should not throw an exception for delete order when it has an extra space"):
     val history = Seq("D B 1 ")
     val result = OrderEventFileParser.convertStrRowsToOrderRows(history)
     result shouldBe Seq(OrderRow(Delete, Bid, Some(1), None, None))
-  }
 
-  test("should throw an exception when it's missing price and quantity values") {
+  test("should throw an exception when it's missing price and quantity values"):
     val history = Seq(
       "N B 1 5 30",
       "N B 2 40",
@@ -93,9 +87,8 @@ class OrderEventFileParserTest extends AnyFunSuite with Matchers {
     )
 
     the [IllegalArgumentException] thrownBy {OrderEventFileParser.convertStrRowsToOrderRows(history)}
-  }
 
-  test("should throw an exception when it's missing instruction and side values") {
+  test("should throw an exception when it's missing instruction and side values"):
     val history = Seq(
       "N B 1 5 30",
       "N B 2 4 40",
@@ -106,20 +99,17 @@ class OrderEventFileParserTest extends AnyFunSuite with Matchers {
     )
 
     the [IllegalArgumentException] thrownBy {OrderEventFileParser.convertStrRowsToOrderRows(history)}
-  }
 
-  test("should throw an exception when it has not a proper instruction value") {
+  test("should throw an exception when it has not a proper instruction value"):
     val history = Seq("P A 1 6 10")
     the [IllegalArgumentException] thrownBy {OrderEventFileParser.convertStrRowsToOrderRows(history)}
-  }
 
-  test("should throw an exception when it's delete and it has price and quantity values") {
+  test("should throw an exception when it's delete and it has price and quantity values"):
     val history = Seq("D A 1 6 10")
     the [IllegalArgumentException] thrownBy {OrderEventFileParser.convertStrRowsToOrderRows(history)}
-  }
 
-  test("should throw an exception when it has not a proper side value") {
+  test("should throw an exception when it has not a proper side value"):
     val history = Seq("D E 1 6 10")
     the [IllegalArgumentException] thrownBy {OrderEventFileParser.convertStrRowsToOrderRows(history)}
-  }
-}
+
+

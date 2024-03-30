@@ -1,12 +1,12 @@
 package com.sk.orderbook.enums
 
-object Side {
-  sealed trait Side
-  case object Bid extends Side
-  case object Ask extends Side
-
-  def apply (code: String) =
+object Side:
+  enum SideEnum:
+    case Bid
+    case Ask
+  
+  import SideEnum.*
+  def apply(code: String): SideEnum =
     if ("B".toLowerCase() == code.toLowerCase()) Bid
     else if ("A".toLowerCase() == code.toLowerCase()) Ask
     else throw new IllegalArgumentException(s"$code is not a recognised Side code")
-}

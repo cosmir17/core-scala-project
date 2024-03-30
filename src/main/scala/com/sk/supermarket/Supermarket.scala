@@ -1,6 +1,6 @@
 package com.sk.supermarket
 
-object Supermarket {
+object Supermarket:
   case class Promotion(count: Int, newPrice: Int)
 
   sealed abstract class Item(val price: Int, val promotion: Option[Promotion] = None)
@@ -25,4 +25,3 @@ object Supermarket {
 
   private def applyPromotionForAGroupOfItems(price: Int, count: Int, promotion: Promotion) =
     (count / promotion.count * promotion.newPrice) + (count % promotion.count * price)
-}

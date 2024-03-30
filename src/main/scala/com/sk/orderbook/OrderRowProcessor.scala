@@ -2,9 +2,9 @@ package com.sk.orderbook
 
 import com.sk.orderbook.OrderEventFileParser.OrderRow
 import com.sk.orderbook.OrderRowProcessor.OrderRowsWithIdx
-import com.sk.orderbook.enums.Instruction.{Delete, New, Update}
+import com.sk.orderbook.enums.Instruction.InstructionEnum.*
 
-object OrderRowProcessor {
+object OrderRowProcessor:
 
   type OrderRowsWithIdx = Seq[(OrderRow, Int)]
 
@@ -14,18 +14,17 @@ object OrderRowProcessor {
     * @return OrderRows
     */
   def compute(orderRows: Seq[OrderRow]) : Seq[OrderRow] = new OrderRowProcessor(orderRows).processedSeq
-}
 
-class OrderRowProcessor(orderRows: Seq[OrderRow]) {
-  val processedSeq: Seq[OrderRow] = {
-    orderRows.foldLeft[OrderRowsWithIdx](Seq())((foldSeqIdxd, origRow) => {
+class OrderRowProcessor(orderRows: Seq[OrderRow]):
+  val processedSeq: Seq[OrderRow] =
+    orderRows.foldLeft[OrderRowsWithIdx](Seq())((foldSeqIdxd, origRow) =>
       val marketUpdateRows = foldSeqIdxd.filter(_._1.side == origRow.side).filterNot(_._1.instruction == Delete)
       val marketN = marketUpdateRows.filter(_._1.priceLevelIndex.exists(existingPriceIdx => origRow.priceLevelIndex.exists(_ <= existingPriceIdx)))
       val marketU = marketUpdateRows.filter(_._1.priceLevelIndex.exists(origRow.priceLevelIndex.contains))
       val marketNU = (marketN ++ marketU).distinct.sortBy(_._2)
       val foldSeq = foldSeqIdxd.map(_._1)
 
-      val resultSeq: Seq[OrderRow] = (origRow.instruction, marketN, marketU) match {
+      val resultSeq: Seq[OrderRow] = (origRow.instruction, marketN, marketU) match
         case (New, Seq(), Seq()) =>
           origRow +: foldSeq
         case (New, _, _) =>
@@ -37,8 +36,5 @@ class OrderRowProcessor(orderRows: Seq[OrderRow]) {
         case (Delete, _, _) =>
           val (front, back) = foldSeq.splitAt(marketNU.last._2)
           front ++ back.slice(1, back.size)
-      }
       resultSeq.zipWithIndex
-    }).map(_._1)
-  }
-}
+    ).map(_._1)

@@ -1,21 +1,27 @@
 package com.sk.orderbook.steps
 
 import java.io.{ByteArrayOutputStream, PrintStream}
-import com.sk.orderbook.Main
+import com.sk.orderbook.MainClass
 import io.cucumber.datatable.DataTable
 import io.cucumber.scala.{EN, ScalaDsl}
-import org.scalatest.matchers.should._
+import org.scalatest.matchers.should.*
 
-class StepDefs extends ScalaDsl with EN with Matchers {
+import scala.jdk.CollectionConverters.*
+import scala.compiletime.uninitialized
+
+class StepDefs extends ScalaDsl with EN with Matchers:
   private val outContent = new ByteArrayOutputStream
   private val errContent = new ByteArrayOutputStream
-  private var lines: Seq[String] = _
+  private var lines: Seq[String] = uninitialized
 
-  Given("""^The following order events are made$"""){ data: DataTable =>
-    lines = data
-        .asMaps(classOf[String], classOf[String])
-        .toArray().toSeq.asInstanceOf[Seq[Map[String, String]]]
-        .map(map => {
+  Given("""^The following order events are made$"""){ (data: DataTable) =>
+    val initialJavaMap = data.asMaps(classOf[String], classOf[String])
+    val mapSeq = initialJavaMap.toArray().toSeq
+    val castedMapSeq: Seq[Map[String, String]] = mapSeq.map { anyRef =>
+      val map = anyRef.asInstanceOf[java.util.Map[String, String]]
+      map.asScala.toMap
+    }
+    lines = castedMapSeq.map(map => {
           val instruction = map.get("instruction")
           val side = map.get("side")
           val priceLevelIndex = map.get("price_level_index")
@@ -25,17 +31,21 @@ class StepDefs extends ScalaDsl with EN with Matchers {
         })
   }
 
-  When("""the main app runs with tick size {double} and book depth {int}"""){ (tickSize: Double, depth: Double) =>
-    new Main(s"prog updates.txt $tickSize $depth")
+  When("""the main app runs with tick size {double} and book depth {int}"""){ (tickSize: Double, depth: Int) =>
+    new MainClass(s"prog updates.txt $tickSize $depth").orderBookMsgs.foreach(println)
   }
 
-  Then("""^the following should be printed$"""){ data: DataTable =>
+  Then("""^the following should be printed$"""){ (data: DataTable) =>
     case class Result(bidPrice: Option[String], bidQuantity: Option[String], askPrice: Option[String], askQuantity: Option[String])
 
-    val tableRows = data
+    val mapSeq = data
       .asMaps(classOf[String], classOf[String])
-      .toArray().toSeq.asInstanceOf[Seq[Map[String, String]]]
-      .map(map => {
+      .toArray().toSeq
+    val castedMapSeq: Seq[Map[String, String]] = mapSeq.map { anyRef =>
+      val map = anyRef.asInstanceOf[java.util.Map[String, String]]
+      map.asScala.toMap
+    }
+    val tableRows = castedMapSeq.map(map => {
         val bidPrice = map.get("bid_price")
         val bidQuantity = map.get("bid_quantity")
         val askPrice = map.get("ask_price")
@@ -50,9 +60,8 @@ class StepDefs extends ScalaDsl with EN with Matchers {
     msgLines.foreach(outContent.toString should include (_))
   }
 
-  Then("""^'(.*)' should be printed.$"""){ message: String =>
+  Then("""^'(.*)' should be printed.$"""){ (message: String) =>
     System.setOut(new PrintStream(outContent))
     System.setErr(new PrintStream(errContent))
     outContent.toString should include (message)
   }
-}
