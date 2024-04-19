@@ -3,11 +3,11 @@ package com.sk.supermarket
 object Supermarket:
   case class Promotion(count: Int, newPrice: Int)
 
-  sealed abstract class Item(val price: Int, val promotion: Option[Promotion] = None)
-  case object A extends Item(50, Some(Promotion(3, 130)))
-  case object B extends Item(30, Some(Promotion(2, 45)))
-  case object C extends Item(20)
-  case object D extends Item(15)
+  enum Item(val price: Int, val promotion: Option[Promotion] = None):
+    case A extends Item(50, Some(Promotion(3, 130)))
+    case B extends Item(30, Some(Promotion(2, 45)))
+    case C extends Item(20)
+    case D extends Item(15)
 
   /**
     * calculate the total price of a list of items

@@ -1,6 +1,7 @@
 package com.sk.supermarket
 
 import com.sk.supermarket.Supermarket._
+import com.sk.supermarket.Supermarket.Item._
 import org.scalatest.matchers.should._
 import org.scalatest.funsuite.AnyFunSuite
 
