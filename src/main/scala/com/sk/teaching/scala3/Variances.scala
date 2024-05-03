@@ -1,7 +1,8 @@
 object Invariance:
   class ABC[A] //invariant
 
-
+object Covariance1:
+  class ABC[A]
   abstract class Animal:
     def name: String
 
@@ -15,7 +16,7 @@ object Invariance:
 
 // We say that ImmutableBox is covariant in A, and this is indicated by the + before the A.
 // More formally, that gives us the following relationship: given some class Cov[+T],
-// then if A is a subtype of B, Cov[A] is a subtype of Cov[B]. This allows us to make very useful and
+// then if X is a subtype of Y, Cov[X] is a subtype of Cov[Y]. This allows us to make very useful and
 // intuitive subtyping relationships using generics.
 
   abstract class Serializer[-A]:
@@ -43,7 +44,7 @@ object Invariance:
   // 2. Type Safety Variance annotations enforce type safety by ensuring that you can't mistakenly put the wrong type into a data structure.
   class Container[+A](val element: A):
     def abc: String = ???
-  val animalBox: Container[Animal] = new Container[Dog](Dog("tom")) // Compiles only if Box is covariant: Container[+A]
+  val animalBox: Container[Animal] = new Container[Dog](Dog("tom")) // Compiles only if Container is covariant: Container[+A]
 
   // 3. API Design Designing a collection API that allows easy manipulation of data:
   trait Queue[+T]:
@@ -52,16 +53,16 @@ object Invariance:
 
 
 
-object Covariance:
+object Covariance2:
+
   abstract class Animal:
-   def name: String
+    def name: String
   case class Dog(name: String) extends Animal
   case class Cat(name: String) extends Animal
 
-  class Container[+A](val element: A):
+  class Container[+A <: Animal](val element: A):
     def get: A = element // A method to showcase polymorphism using covariance
-
-    def describe: String = s"This container holds a ${element.getClass.getSimpleName} named ${element.asInstanceOf[Animal].name}"
+    def describe: String = s"This container holds a ${element.getClass.getSimpleName} named ${element.name}"
 
   val dogContainer = new Container[Dog](Dog("Rex"))
   val catContainer = new Container[Cat](Cat("Whiskers"))
