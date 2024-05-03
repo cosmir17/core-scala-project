@@ -10,9 +10,13 @@ object Covariance1:
 
   case class Cat(name: String, colour: String) extends Animal
 
+//  class ImmutableBox[+A](val content: A)
+//  val catbox: ImmutableBox[Cat] = ImmutableBox[Cat](Cat("milton", "black"))
+//  val animalBox2: ImmutableBox[Animal] = catbox // now this compiles
+
   class ImmutableBox[+A](val content: A)
-  val catbox: ImmutableBox[Cat] = ImmutableBox[Cat](Cat("milton", "black"))
-  val animalBox2: ImmutableBox[Animal] = catbox // now this compiles
+  val catbox = ImmutableBox(Cat("milton", "black")) //the type of catbox automatically becomes ImmutableBox[Cat]
+  val animalBox2: ImmutableBox[Animal] = catbox
 
 // We say that ImmutableBox is covariant in A, and this is indicated by the + before the A.
 // More formally, that gives us the following relationship: given some class Cov[+T],
