@@ -53,3 +53,16 @@ The repository also includes a set of Scala 3 Coding Gym materials covering vari
 Feel free to explore the code and materials in this repository.
 
 Happy coding with Scala 3.4.0!
+
+## Father Picture Report Producer
+
+This repository also includes the 'father-picture-report-producer' project, a practical application of Scala 3 concepts. This project is an Image Document Generator designed to simplify the creation of photo albums, especially for users who may not be technically inclined. Key features include:
+
+- Automated document generation using image file names as captions
+- Custom document titling via a user-friendly GUI
+- Grid layout for image arrangement
+- LibreOffice Writer compatibility for optimal formatting
+- Support for multiple image formats and robust file handling
+- Bilingual interface (English and Korean)
+
+This project showcases real-world application of Scala 3, demonstrating GUI development, file I/O operations, and document generation using Apache POI. It serves as an excellent example of how Scala can be used to create practical, user-friendly applications.
