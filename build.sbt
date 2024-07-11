@@ -1,8 +1,8 @@
 name := "core-scala-project"
 
-version := "1.0"
+version := "1.1"
 
-scalaVersion := "3.4.1"
+scalaVersion := "3.4.2"
 
 trapExit := false
 
