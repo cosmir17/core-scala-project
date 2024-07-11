@@ -3,7 +3,7 @@
 ![Build Status](https://codebuild.eu-west-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiVmJyME1kd2o2eTN0QUNQbEs2YVZ5aVlZam4zNGRXMC9SSUNyT1o1ajR2MW5XK2ozc25VcXQ2SFVXdFg1Yzg3aWNQMG1uNGFlK01mS0FFOE9kUk81M2owPSIsIml2UGFyYW1ldGVyU3BlYyI6IkdsRVA2Yk4wK0NoR1BhNGIiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)
 
 
-This repository contains a collection of Scala 3.4.0 projects, including five interview assignments and Scala 3 Coding Gym materials that I created during my time at previous companies.
+This repository contains a collection of Scala 3 projects, including five interview assignments and Scala 3 Coding Gym materials that I created during my time at previous companies.
 
 ## Interview Assignments
 
@@ -52,7 +52,7 @@ The repository also includes a set of Scala 3 Coding Gym materials covering vari
 
 Feel free to explore the code and materials in this repository.
 
-Happy coding with Scala 3.4.0!
+Happy coding with Scala 3!
 
 ## Father Picture Report Producer
 
